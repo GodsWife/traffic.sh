@@ -1,0 +1,40 @@
+#!/bin/bash
+
+## Mandatory variables
+sessionStart="UNSET"
+clientHostAddress="UNSET"
+clientUID="UNSET"
+sessionDuration="UNSET"
+txVolume="UNSET"
+rxVolume="UNSET"
+
+## Parse variables
+
+if [ ! -z "$time_ascii" ]; then
+        sessionStart=$time_ascii
+fi
+
+if [ ! -z "$trusted_ip" ]; then
+        clientHostAddress=$trusted_ip
+fi
+
+if [ ! -z "$username" ]; then
+        clientUID=$username
+fi
+
+if [ ! -z "$time_duration" ]; then
+        sessionDuration=$time_duration
+fi
+
+if [ ! -z "$bytes_sent" ]; then
+        txVolume=$bytes_sent
+fi
+
+if [ ! -z "$bytes_received" ]; then
+        rxVolume=$bytes_received
+fi
+
+## Send to syslog
+logger -t openvpn -- "Client Disconnect: Username: $clientUID HostIP: $clientHostAddress"
+logger -t openvpn -- "Session Duration: $sessionDuration seconds opened at $sessionStart"
+logger -t openvpn -- "Session Traffic: TX: $txVolume bytes RX: $rxVolume bytes"
